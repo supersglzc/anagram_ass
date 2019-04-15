@@ -1,12 +1,31 @@
 #include <string.h>
+#include <ctype.h>
 #include "dictionary.h"
 
 //forms hash value for string s
 //this produces a starting value in the dictionary array
 unsigned hash(const char *s) {
-	unsigned hashval;
+	unsigned hashval = 1;
 	//TODO - implement polynomial hashing of string s
-	
+	int primes[26];
+	int n = 26;
+   	int i = 3;
+    	int count, c;
+	primes[0] = 2;
+    	for(count = 2; count <= n;){
+        	for(c = 2 ;c <= i - 1 ;c++){
+         		if(i % c == 0)
+           			break;
+     		}
+      		if(c == i){
+        		primes[count - 1] = i;
+         		count++;
+      		}
+      		i++;
+   	}
+	for(int i = 0; i < strlen(s); i ++){
+		hashval *= primes[tolower(s[i]) - 'a'];
+	}	
 	return hashval ;
 }
 
@@ -18,9 +37,12 @@ unsigned hash(const char *s) {
 DNode * get (DNode ** dictionary, int hash_size, const char *key) {
 	DNode * np;
 	unsigned int hashval = hash(key);
-	for (np = dictionary [hashval % hash_size]; np !=NULL; np = np->next)
-		if (strcmp (key, np->key) == 0)
-			return np; //found
+	np = dictionary[hashval % hash_size];
+	if (np != NULL)
+		return np;
+//	for (np = dictionary [hashval % hash_size]; np !=NULL; np = np->next)
+//		if (strcmp (key, np->key) == 0)
+//			return np; //found
 	return NULL; //not found
 }
 
@@ -28,9 +50,8 @@ DNode * get (DNode ** dictionary, int hash_size, const char *key) {
 //if not, a new entry is created
 //next it adds the value to the list of values for this node
 DNode * set (DNode ** dictionary, int hash_size,  const char * key, const char * value) {
-	unsigned int hashval;
+	unsigned int hashval = hash(key);
 	DNode *np = get (dictionary, hash_size, key);
-	
 	if (np == NULL) { //this is a new key
 		np = (DNode *) malloc (sizeof (*np));
 		if (np == NULL)

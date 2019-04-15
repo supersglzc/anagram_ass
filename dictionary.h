@@ -2,7 +2,7 @@
 #define DICTIONARY_H
 
 #include <stdlib.h>
-#define DEFAULT_HASH_SIZE 500
+#define DEFAULT_HASH_SIZE 10000000
 
 typedef struct v_node {
 	char* value;
