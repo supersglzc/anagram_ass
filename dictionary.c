@@ -1,32 +1,34 @@
 #include <string.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include "dictionary.h"
 
 //forms hash value for string s
 //this produces a starting value in the dictionary array
 unsigned hash(const char *s) {
-	unsigned hashval = 1;
+	unsigned hashval = 0;
 	//TODO - implement polynomial hashing of string s
-	int primes[26];
-	int n = 26;
-   	int i = 3;
-    	int count, c;
-	primes[0] = 2;
-    	for(count = 2; count <= n;){
-        	for(c = 2 ;c <= i - 1 ;c++){
-         		if(i % c == 0)
-           			break;
-     		}
-      		if(c == i){
-        		primes[count - 1] = i;
-         		count++;
-      		}
-      		i++;
-   	}
+//	int primes[26];
+//	int n = 26;
+// 	int i = 3;
+//    	int count, c;
+//	primes[0] = 2;
+//    	for(count = 2; count <= n;){
+//        	for(c = 2 ;c <= i - 1 ;c++){
+//         		if(i % c == 0)
+//           			break;
+//     		}
+//      		if(c == i){
+//        		primes[count - 1] = i;
+//         		count++;
+ //     		}
+//      		i++;
+//   	}
 	for(int i = 0; i < strlen(s); i ++){
-		hashval *= primes[tolower(s[i]) - 'a'];
-	}	
-	return hashval ;
+//		hashval *= primes[tolower(s[i]) - 'a'];
+		hashval = (hashval<<5)-(hashval)+s[i];
+	}
+	return hashval;
 }
 
 //Performs search for a key in the hashtable.
@@ -37,12 +39,12 @@ unsigned hash(const char *s) {
 DNode * get (DNode ** dictionary, int hash_size, const char *key) {
 	DNode * np;
 	unsigned int hashval = hash(key);
-	np = dictionary[hashval % hash_size];
-	if (np != NULL)
-		return np;
-//	for (np = dictionary [hashval % hash_size]; np !=NULL; np = np->next)
-//		if (strcmp (key, np->key) == 0)
-//			return np; //found
+//	np = dictionary[hashval % hash_size];
+//	if (np != NULL)
+//		return np;
+	for (np = dictionary [hashval % hash_size]; np !=NULL; np = np->next)		
+		if (strcmp (key, np->key) == 0)
+			return np; //found
 	return NULL; //not found
 }
 
