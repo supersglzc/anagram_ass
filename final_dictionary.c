@@ -12,19 +12,6 @@ void print_list(VNode *head){
 	printf("\n");
 }
 
-void print_anagram(VNode *head){
-	if (!head) return;
-	VNode *cur = head->next;
-	if (cur){
-		printf("Anagram for '%s':\n",head->value);
-		while(cur){
-			printf("%s\n", cur->value);
-			cur = cur->next;
-		}
-	}
-}
-
-
 int main (int argc, char ** argv) {
 	
 	DNode* result;
